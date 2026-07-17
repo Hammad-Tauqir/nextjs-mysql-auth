@@ -1,27 +1,47 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+
 export default function Dashboard(){
+
+const router=useRouter();
+
+
+
+const logout=async()=>{
+
+
+await fetch(
+"/api/auth/logout",
+{
+method:"POST"
+}
+);
+
+
+router.push("/login");
+
+
+}
+
+
 
 return(
 
-<div className="flex min-h-screen items-center justify-center">
+<div>
 
-<div className="rounded-lg bg-white p-10 shadow">
-
-<h1 className="text-4xl font-bold">
+<h1>
 Welcome 🎉
 </h1>
 
 
-<p className="mt-4 text-gray-600">
-You have successfully logged in.
-</p>
+<button
+onClick={logout}
+>
+Logout
+</button>
 
-
-<p className="mt-2">
-Your account is connected with Railway Database.
-</p>
-
-
-</div>
 
 </div>
 
