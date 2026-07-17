@@ -1,28 +1,29 @@
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 
 
-const secret = process.env.JWT_SECRET!;
+const secret = new TextEncoder().encode(
+  process.env.JWT_SECRET
+);
 
 
-export function createToken(payload:any){
+export async function createToken(payload: any) {
 
-    return jwt.sign(
-        payload,
-        secret,
-        {
-            expiresIn:"1d"
-        }
-    );
+  return await new SignJWT(payload)
+    .setProtectedHeader({
+      alg: "HS256",
+    })
+    .setExpirationTime("1d")
+    .sign(secret);
 
 }
 
 
 
-export function verifyToken(token:string){
+export async function verifyToken(token: string) {
 
-    return jwt.verify(
-        token,
-        secret
-    );
+  return await jwtVerify(
+    token,
+    secret
+  );
 
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../../../../lib/prisma";
 import bcrypt from "bcryptjs";
 import { createToken } from "@/lib/jwt";
 
@@ -60,7 +60,7 @@ status:400
 
 }
 
-const token = createToken({
+const token = await createToken({
     id:user.id,
     email:user.email
 });
