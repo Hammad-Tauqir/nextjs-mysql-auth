@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { createToken } from "@/lib/jwt";
 
 
 export async function POST(request:Request){
@@ -59,18 +60,31 @@ status:400
 
 }
 
+const token = createToken({
+    id:user.id,
+    email:user.email
+});
 
-
-return NextResponse.json(
+const response = NextResponse.json(
 {
-message:"Login successful",
-user:{
-id:user.id,
-name:user.name,
-email:user.email
-}
+message:"Login successful"
 }
 );
+
+
+response.cookies.set(
+"token",
+token,
+{
+httpOnly:true,
+secure:process.env.NODE_ENV==="production",
+sameSite:"strict",
+maxAge:60*60*24
+}
+);
+
+
+return response;
 
 
 }
