@@ -1,56 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyTokenMiddleware } from "@/lib/jwt-middleware";
+import { verifyToken } from "@/lib/jwt";
 
-export async function middleware(request:NextRequest){
+export function middleware(request: NextRequest) {
 
-const token=request.cookies.get("token")?.value;
+  const token = request.cookies.get("token")?.value;
 
+  if (request.nextUrl.pathname.startsWith("/dashboard")) {
 
-const path=request.nextUrl.pathname;
+    if (!token) {
+      console.log("No token found");
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
 
+    try {
+      const decoded = verifyToken(token);
+      console.log("Token verified:", decoded);
+    } catch (error) {
+      console.log("JWT verification error:", error);
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
 
-
-if(path.startsWith("/dashboard")){
-
-
-if(!token){
-
-return NextResponse.redirect(
-new URL("/login",request.url)
-);
-
+  return NextResponse.next();
 }
 
-
-try{
-
-await verifyTokenMiddleware(token);
-
-}
-catch(error){
-
-console.log("JWT ERROR:",error);
-
-return NextResponse.redirect(
-new URL("/login",request.url)
-);
-
-}
-
-
-}
-
-
-return NextResponse.next();
-
-}
-
-
-
-export const config={
-
-matcher:[
-"/dashboard/:path*"
-    ]
-
+export const config = {
+  matcher: ["/dashboard/:path*"],
 };
