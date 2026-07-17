@@ -1,4 +1,5 @@
 console.log("NEW PRISMA FILE LOADED");
+
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "@/generated/prisma/client";
 
@@ -9,12 +10,15 @@ const globalForPrisma = globalThis as unknown as {
 
 
 const adapter = new PrismaMariaDb({
-  host: "localhost",
-  user: "root",
-  password: process.env.MYSQL_PASSWORD,
-  database: "nextjs_app",
+
+  host: process.env.MYSQL_HOST!,
+  user: process.env.MYSQL_USER!,
+  password: process.env.MYSQL_PASSWORD!,
+  database: process.env.MYSQL_DATABASE!,
+  port: Number(process.env.MYSQL_PORT),
+
   connectionLimit: 5,
-  port: 3306,
+
 });
 
 
