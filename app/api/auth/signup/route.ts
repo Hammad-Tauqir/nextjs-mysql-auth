@@ -99,20 +99,7 @@ export async function POST(request: Request) {
 
   console.error("SIGNUP ERROR:", error);
 
-  // If running on Vercel, return success even if DB is unavailable
-  if (process.env.VERCEL) {
-    return Response.json(
-      {
-        message: "Account created successfully!"
-      },
-      {
-        status: 200,
-      }
-    );
-  }
-
-  // Local development: return the actual error
-  return Response.json(
+  return NextResponse.json(
     {
       message: "Something went wrong"
     },
@@ -120,6 +107,7 @@ export async function POST(request: Request) {
       status: 500,
     }
   );
+
 }
 
 }
