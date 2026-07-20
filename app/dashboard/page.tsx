@@ -20,7 +20,7 @@ method:"POST"
 );
 
 
-router.push("/login");
+router.push("/");
 
 
 }
